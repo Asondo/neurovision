@@ -2,7 +2,6 @@
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
 const Neuron = function(initial) {
     const size = initial.size || 3;
     const padding = initial.padding || 1;
@@ -54,29 +53,27 @@ const Neuron = function(initial) {
     view.style.height = size + 'px';
     view.style.top = y*(padding + size) + 'px';
     view.style.left = x*(padding + size) + 'px';
-    // Активация+ визуализация
+    // Активация + визуализация
     function checkActivation(v) {
         var result = 0;
-        //for (let i=0; i<inputs.length; i++) {
-        //    let x = inputs[i][0];
-        //    let y = inputs[i][1];
-        //    let neighbor = brain[x + '_' + y];
-        //    if (neighbor && neighbor.active) {
-        //        result++;
-        //    }
-        //}
-        activate(v);
+        for (let i=0; i<neighbors.length; i++) {
+            let x = neighbors[i][0];
+            let y = neighbors[i][1];
+            let neighbor = brain[x + '_' + y];
+            if (neighbor && neighbor.active) {
+                result++;
+            }
+        }
+        activate(result === 1);
     }
     function activate(v) {
         if (v) {
             active = true;
-            //sendOutDoor(v);
+            view.style.borderColor = v ? 'rgb(0, 186, 255)' : 'black';
             setTimeout(()=>{sendOutDoor(v);}, 0);
-            value += v;
-            view.style.opacity = value;
         } else {
             active = false;
-            view.style.opacity = 0;
+            view.style.borderColor = 'black';
         }
     }
     // Передача активации соседям
@@ -84,13 +81,13 @@ const Neuron = function(initial) {
         for (let i=0; i<neighbors.length; i++) {
             let x = neighbors[i][0];
             let y = neighbors[i][1];
-            let newV = v - 0.05;
+            let newV = v;
             let neighbor = brain[x + '_' + y];
-            if (neighbor && (neighbor.value) < newV) {
+            if (neighbor) {
                 neighbor.value = newV;
             }
         }
-        //setTimeout(()=>activate(false), 100);
+        setTimeout(()=>activate(false), 1000);
     }
 
     return {
@@ -101,15 +98,15 @@ const Neuron = function(initial) {
             parent.appendChild(view);
         },
         set value(data) {
-            //value = data;
-            activate(data);
+            value = data;
+            checkActivation(data);
         },
         set activate(data) {
             value = data;
-            activate(value);
+            activate(data);
         },
-        get value() {
-            return value;
+        get active() {
+            return active;
         }
     }
 };
@@ -136,7 +133,6 @@ const brain = (function() {
         columns = count.x;
         lines = count.y;
         for (let x=0; x<columns; x++) {
-            //brain[x] = [];
             for (let y=0; y<lines; y++) {
                 let initial = {
                     position: {
