@@ -7,7 +7,7 @@ const Neuron = function(initial) {
     const padding = initial.padding || 1;
     const x = initial.position.x;
     const y = initial.position.y;
-    const brain = initial.brain;
+    const map = initial.map;
     const id = x + '_' + y;
     const view = document.createElement('div');
     const neighbors = [
@@ -59,7 +59,7 @@ const Neuron = function(initial) {
         for (let i=0; i<neighbors.length; i++) {
             let x = neighbors[i][0];
             let y = neighbors[i][1];
-            let neighbor = brain[x + '_' + y];
+            let neighbor = map[x + '_' + y];
             if (neighbor && neighbor.active) {
                 result++;
             }
@@ -82,7 +82,7 @@ const Neuron = function(initial) {
             let x = neighbors[i][0];
             let y = neighbors[i][1];
             let newV = v;
-            let neighbor = brain[x + '_' + y];
+            let neighbor = map[x + '_' + y];
             if (neighbor) {
                 neighbor.value = newV;
             }
@@ -111,7 +111,7 @@ const Neuron = function(initial) {
     }
 };
 const brain = (function() {
-    var brain = {};
+    var map = {};
     var columns = 100;
     var lines = 100;
     var size = 4;
@@ -143,9 +143,9 @@ const brain = (function() {
                     padding: padding,
                     columns: columns,
                     lines: lines,
-                    brain: brain
+                    map: map
                 };
-                brain[x + '_' + y] = Neuron(initial);
+                map[x + '_' + y] = Neuron(initial);
             }
         }
     }
@@ -155,12 +155,12 @@ const brain = (function() {
         parent.addEventListener('click', (e) => {
             let id = e.target.id;
             //console.log(id);
-            brain[id].activate = 1;
+            map[id].activate = 1;
         });
         document.body.appendChild(parent);
         for (let x=0; x<columns; x++) {
             for (let y=0; y<lines; y++) {
-                brain[x + '_' + y].draw(parent);
+                map[x + '_' + y].draw(parent);
             }
         }
     }
