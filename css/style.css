@@ -1,0 +1,25 @@
+body {
+    font-size: 16pt; /* Размер основного шрифта в пунктах  */
+    background-color: #000000; /* Цвет фона веб-страницы */
+    color: #ffffff; /* Цвет основного текста */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.container {
+    font-size: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.element {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    /*box-shadow: 0 0 0px rgb(0, 186, 255);*/
+    /*border: 1px solid black;*/
+    margin: 2px;
+    background-color: rgb(0, 186, 255);
+    opacity: 0;
+}
